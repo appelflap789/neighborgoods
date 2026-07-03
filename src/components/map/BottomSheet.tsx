@@ -5,7 +5,8 @@ import { Drawer } from "vaul";
 import { StoreWithDistance, Product } from "@/lib/types";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Filters } from "@/components/search/Filters";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, MapPin } from "lucide-react";
+import { RADIUS_MIN, RADIUS_MAX } from "@/config/constants";
 
 const SNAP_POINTS = [0.12, 0.5, 0.92];
 
@@ -18,6 +19,8 @@ interface BottomSheetProps {
   onCategoryChange: (category: string | null) => void;
   inStockOnly: boolean;
   onInStockChange: (value: boolean) => void;
+  radius: number;
+  onRadiusChange: (radius: number) => void;
 }
 
 export function BottomSheet({
@@ -29,6 +32,8 @@ export function BottomSheet({
   onCategoryChange,
   inStockOnly,
   onInStockChange,
+  radius,
+  onRadiusChange,
 }: BottomSheetProps) {
   const [snap, setSnap] = useState<number | string | null>(SNAP_POINTS[0]);
   const [showFilters, setShowFilters] = useState(false);
@@ -90,10 +95,10 @@ export function BottomSheet({
             </button>
           </div>
 
-          {/* Filters panel (collapsible) */}
+          {/* Filters + radius panel (collapsible) */}
           {showFilters && (
-            <div className="px-4 pb-3 border-b border-border flex-shrink-0">
-              <div className="flex items-center justify-between mb-2">
+            <div className="px-4 pb-3 border-b border-border flex-shrink-0 space-y-3">
+              <div className="flex items-center justify-between">
                 <span className="text-xs font-medium text-muted">Filter stores</span>
                 <button onClick={() => setShowFilters(false)}>
                   <X size={14} className="text-muted" />
@@ -105,6 +110,28 @@ export function BottomSheet({
                 inStockOnly={inStockOnly}
                 onInStockChange={onInStockChange}
               />
+              {/* Radius slider */}
+              <div className="pt-2 border-t border-border">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <MapPin size={13} className="text-primary" />
+                  <span className="text-xs font-medium text-foreground">
+                    Search radius: {radius} km
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={RADIUS_MIN}
+                  max={RADIUS_MAX}
+                  step={0.5}
+                  value={radius}
+                  onChange={(e) => onRadiusChange(parseFloat(e.target.value))}
+                  className="w-full accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted mt-0.5">
+                  <span>{RADIUS_MIN} km</span>
+                  <span>{RADIUS_MAX} km</span>
+                </div>
+              </div>
             </div>
           )}
 

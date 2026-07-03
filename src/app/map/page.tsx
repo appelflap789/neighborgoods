@@ -122,12 +122,15 @@ export default function MapPage() {
             onMapClick={setCustomLocation}
             flyToStore={flyToStore}
           />
-          <RadiusControl
-            radius={radius}
-            onRadiusChange={setRadius}
-            min={RADIUS_MIN}
-            max={RADIUS_MAX}
-          />
+          {/* Radius control — desktop only, replaced by slider in bottom sheet on mobile */}
+          <div className="hidden md:block">
+            <RadiusControl
+              radius={radius}
+              onRadiusChange={setRadius}
+              min={RADIUS_MIN}
+              max={RADIUS_MAX}
+            />
+          </div>
         </main>
 
         {/* Mobile bottom sheet */}
@@ -141,6 +144,8 @@ export default function MapPage() {
             onCategoryChange={setCategoryFilter}
             inStockOnly={inStockOnly}
             onInStockChange={setInStockOnly}
+            radius={radius}
+            onRadiusChange={setRadius}
           />
         </div>
       </div>
